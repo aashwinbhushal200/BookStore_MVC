@@ -27,21 +27,26 @@ namespace BookStore_MVC_Web.Controllers
             return View();
         }
         [HttpPost]
+        //after data is filled
         public IActionResult Create(Category obj)
         {
+            //custom validation
             if (obj.Name == obj.DisplayOrder.ToString())
             {
                 ModelState.AddModelError("name", "The DisplayOrder cannot exactly match the Name.");
             }
-
-            /*if (ModelState.IsValid)
-            {
-                _unitOfWork.Category.Add(obj);
-                _unitOfWork.Save();
-                TempData["success"] = "Category created successfully";
-                return RedirectToAction("Index");
-            }*/
-            return View();
+            _db.Categories.Add(obj);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+            
+            /* if (ModelState.IsValid)
+             {
+                 _unitOfWork.Category.Add(obj);
+                 _unitOfWork.Save();
+                 TempData["success"] = "Category created successfully";
+                 return RedirectToAction("Index");
+             }*/
+          
 
         }
 

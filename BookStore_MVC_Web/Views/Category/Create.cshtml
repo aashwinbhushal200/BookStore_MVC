@@ -14,7 +14,9 @@
                 @*<div asp-validation-summary="ModelOnly"></div>*@
                 <div class="form-floating py-2 col-12">
                     <input asp-for="Name" class="form-control border-0 shadow" />
+                    @* tag helper sp-for="Name" *@
                     <label asp-for="Name" class="ms-2"></label>
+                    @* server side validation *@
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-2 col-12">
@@ -42,7 +44,7 @@
 
 
 
-
+@* adding client side validation through shared/_ValidationScriptsPartial  *@
 @section Scripts{
     @{
     <partial name="_ValidationScriptsPartial"/>
