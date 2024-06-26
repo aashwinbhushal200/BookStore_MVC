@@ -37,6 +37,8 @@ namespace BookStore_MVC_Web.Controllers
             }
             _db.Categories.Add(obj);
             _db.SaveChanges();
+            //added for toaster notification 
+            TempData["success"] = "Category created successfully";
             return RedirectToAction("Index");
             
             /* if (ModelState.IsValid)
