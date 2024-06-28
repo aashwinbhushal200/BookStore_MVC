@@ -4,12 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using BookStore.DataAccess.Repository.IRepository;
+using BookStore.DataAcess.DataAccess.Repository.IRepository;
 using BookStore.DataAcess.Data;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace BookStore.DataAccess.Repository
+namespace BookStore.DataAcess.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
@@ -18,15 +18,18 @@ namespace BookStore.DataAccess.Repository
         public Repository(ApplicationDbContext db)
         {
             _db = db;
+
+            //for eg dbset will be set to categories when constructor gets called.
             this.dbSet = _db.Set<T>();
-            //_db.Categories == dbSet
-            _db.Products.Include(u => u.Category).Include(u => u.CategoryId);
+            //now it becomes as _db.Categories == dbSet
+           // _db.Products.Include(u => u.Category).Include(u => u.CategoryId);
             
         }
 
         public void Add(T entity)
         {
             dbSet.Add(entity);
+            //same as _db.Categories.Add(entity)
         }
 
         public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)

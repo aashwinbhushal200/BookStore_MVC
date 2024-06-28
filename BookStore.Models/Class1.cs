@@ -1,4 +1,4 @@
-﻿namespace BookStore.Models
+﻿namespace BookStore.DataAcess.Models
 {
     public class Class1
     {

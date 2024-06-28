@@ -1,11 +1,11 @@
 ﻿
-using BookStore.Data;
-using BookStore.Models;
+using BookStore.DataAcess.Data;
+using BookStore.DataAcess.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BookStore.Controllers
+namespace BookStore.DataAcess.Controllers
 {
     
     public class CategoryController : Controller
