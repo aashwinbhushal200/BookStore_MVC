@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookStore.DataAcess.DataAccess.Repository.IRepository
+namespace BookStore.DataAcess.Repository.IRepository
 {
     public interface IRepository<T> where T : class
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using BookStore.DataAcess.DataAccess.Repository.IRepository;
+using BookStore.DataAcess.Repository.IRepository;
 using BookStore.DataAcess.Data;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
