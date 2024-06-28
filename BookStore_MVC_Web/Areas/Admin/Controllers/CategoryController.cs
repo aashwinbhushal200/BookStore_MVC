@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.DataAcess.Controllers
 {
-
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         /*  replace by UnitOfWork
