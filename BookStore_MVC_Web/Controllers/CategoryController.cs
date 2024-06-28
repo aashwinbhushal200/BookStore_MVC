@@ -1,24 +1,31 @@
 ﻿
 using BookStore.DataAcess.Data;
 using BookStore.DataAcess.Models;
+using BookStore.DataAcess.Repository;
 using BookStore.DataAcess.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.DataAcess.Controllers
 {
-    
+
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository _categoryRepo;
-        public CategoryController(ICategoryRepository db)
+        /*  replace by UnitOfWork
+          private readonly ICategoryRepository _categoryRepo;*/
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _categoryRepo = db;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> categories = _categoryRepo.GetAll().ToList();
-            //  List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();
+            //unitOfWork implementation:
+            List<Category> categories = _unitOfWork.iCategoryRepository.GetAll().ToList();
+            /*  repo pattern implementation
+              List<Category> categories = _categoryRepo.GetAll().ToList();*/
+            /*   ApplicationDbContext implementation
+                  List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();*/
             return View(categories);
         }
 
@@ -36,15 +43,19 @@ namespace BookStore.DataAcess.Controllers
                 ModelState.AddModelError("name", "The DisplayOrder cannot exactly match the Name.");
             }
             /* _db.Categories.Add(obj);
-             _db.SaveChanges();
-            conver into Repo pattern*/
-            _categoryRepo.Add(obj);
-            _categoryRepo.Save();
+             _db.SaveChanges();*/
+            /* convert into Repo pattern
+             _categoryRepo.Add(obj);*/
 
-             //added for toaster notification 
-             TempData["success"] = "Category created successfully";
+            //unitOfWork
+            _unitOfWork.iCategoryRepository.Add(obj);
+            //save is only of UnitOfWork not icategory
+            _unitOfWork.Save();
+
+            //added for toaster notification 
+            TempData["success"] = "Category created successfully";
             return RedirectToAction("Index");
-            
+
             /* if (ModelState.IsValid)
              {
                  _unitOfWork.Category.Add(obj);
@@ -52,7 +63,7 @@ namespace BookStore.DataAcess.Controllers
                  TempData["success"] = "Category created successfully";
                  return RedirectToAction("Index");
              }*/
-          
+
 
         }
         public IActionResult Edit(int? id)
@@ -61,7 +72,7 @@ namespace BookStore.DataAcess.Controllers
             {
                 return NotFound();
             }
-            Category? categoryFromDb = _categoryRepo.Get(u => u.Id == id);
+            Category? categoryFromDb = _unitOfWork.iCategoryRepository.Get(u => u.Id == id);
             //Category? categoryFromDb1 = _db.Categories.FirstOrDefault(u=>u.Id==id);
             //Category? categoryFromDb2 = _db.Categories.Where(u=>u.Id==id).FirstOrDefault();
 
@@ -76,8 +87,8 @@ namespace BookStore.DataAcess.Controllers
         {
             if (ModelState.IsValid)
             {
-                _categoryRepo.Update(obj);
-                _categoryRepo.Save();
+                _unitOfWork.iCategoryRepository.Update(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index");
             }
@@ -90,7 +101,7 @@ namespace BookStore.DataAcess.Controllers
             {
                 return NotFound();
             }
-        Category ? categoryFromDb = _categoryRepo.Get(u => u.Id == id);
+            Category? categoryFromDb = _unitOfWork.iCategoryRepository.Get(u => u.Id == id);
 
             if (categoryFromDb == null)
             {
@@ -101,13 +112,13 @@ namespace BookStore.DataAcess.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Category? obj = _categoryRepo.Get(u => u.Id == id);
+            Category? obj = _unitOfWork.iCategoryRepository.Get(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
             }
-            _categoryRepo.Remove(obj);
-            _categoryRepo.Save();
+            _unitOfWork.iCategoryRepository.Remove(obj);
+            _unitOfWork.Save();
             TempData["success"] = "Category deleted successfully";
             return RedirectToAction("Index");
         }

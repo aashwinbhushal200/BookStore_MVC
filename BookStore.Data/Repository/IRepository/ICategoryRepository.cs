@@ -13,7 +13,7 @@ namespace BookStore.DataAcess.Repository.IRepository
     { 
         //T - Category
         void  Update(Category category);
-        void Save();
+        
         
     }   
 }

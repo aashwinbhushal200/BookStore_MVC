@@ -18,10 +18,11 @@ namespace BookStore.DataAcess.Repository
         {
             _db = db;   
         }
+        /*this save function is not part of model or controller, so we move it to unitOfwork.
         public void Save()
         {
             _db.SaveChanges();
-        }
+        }*/
         public void Update(Category category)
         {
             _db.Categories.Update(category);
