@@ -39,7 +39,7 @@ namespace BookStore.DataAcess.Controllers
              _db.SaveChanges();
             conver into Repo pattern*/
             _categoryRepo.Add(obj);
-            _categoryRepo.save();
+            _categoryRepo.Save();
 
              //added for toaster notification 
              TempData["success"] = "Category created successfully";
@@ -77,7 +77,7 @@ namespace BookStore.DataAcess.Controllers
             if (ModelState.IsValid)
             {
                 _categoryRepo.Add(obj);
-                _categoryRepo.save();
+                _categoryRepo.Save();
                 TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index");
             }
@@ -107,7 +107,7 @@ namespace BookStore.DataAcess.Controllers
                 return NotFound();
             }
             _categoryRepo.Remove(obj);
-            _categoryRepo.save();
+            _categoryRepo.Save();
             TempData["success"] = "Category deleted successfully";
             return RedirectToAction("Index");
         }
