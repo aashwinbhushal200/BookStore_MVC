@@ -35,7 +35,7 @@ namespace BookStore.DataAcess.Controllers
         }
         [HttpPost]
         //after data is filled
-        public IActionResult Creat(Product obj)
+        public IActionResult Create(Product obj)
         {
             //custom validation
             if (obj.Title == obj.Description.ToString())
