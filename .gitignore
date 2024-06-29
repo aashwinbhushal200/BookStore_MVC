@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/BookStore_MVC_Web/Migrations/20240625060523_AddCategoryTbDb.cs
+/BookStore_MVC_Web/Migrations/20240625102201_seedDBTable.cs
+/BookStore_MVC_Web/Migrations/ApplicationDbContextModelSnapshot.cs
+/BookStore_MVC_Web/Migrations/20240625102201_seedDBTable.Designer.cs
+/BookStore_MVC_Web/Migrations/ApplicationDbContextModelSnapshot.cs

@@ -1,4 +1,4 @@
-namespace BookStore_MVC_Web.Models
+namespace BookStore.DataAcess.Models
 {
     public class ErrorViewModel
     {
