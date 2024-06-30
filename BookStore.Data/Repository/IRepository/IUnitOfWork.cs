@@ -10,6 +10,7 @@ namespace BookStore.DataAcess.Repository.IRepository
     {
 
         ICategoryRepository iCategoryRepository { get; }
+        IProductRepository iProductRepository { get; }
         void Save();
         
     }

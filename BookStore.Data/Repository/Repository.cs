@@ -13,15 +13,15 @@ namespace BookStore.DataAcess.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _dbContext;
         internal DbSet<T> dbSet;
         public Repository(ApplicationDbContext db)
         {
-            _db = db;
+            _dbContext = db;
 
-            //for eg dbset will be set to categories when constructor gets called.
-            this.dbSet = _db.Set<T>();
-            //now it becomes as _db.Categories == dbSet
+          /* for eg dbset will be set to categories when constructor gets called.
+            now it becomes as _db.Categories == dbSet*/
+            this.dbSet = _dbContext.Set<T>();
            // _db.Products.Include(u => u.Category).Include(u => u.CategoryId);
             
         }

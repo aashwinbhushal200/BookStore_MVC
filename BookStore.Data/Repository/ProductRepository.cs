@@ -1,4 +1,5 @@
 ﻿using BookStore.DataAcess.Data;
+using BookStore.DataAcess.Models;
 using BookStore.DataAcess.Repository.IRepository;
 using System;
 using System.Collections.Generic;
@@ -8,26 +9,24 @@ using System.Threading.Tasks;
 
 namespace BookStore.DataAcess.Repository
 {
-    public class UnitOfWork:IUnitOfWork
+    public class ProductRepository : Repository<Product>, IProductRepository
     {
-        public ICategoryRepository iCategoryRepository { get; set; }
-        public IProductRepository iProductRepository { get; set; }
         private ApplicationDbContext _db;
 
-         public UnitOfWork(ApplicationDbContext db) 
+        //when we get this implementation , we want to pass this implementation to all base class
+        public ProductRepository(ApplicationDbContext db) : base(db)
         {
-            _db = db;
-            iCategoryRepository=new CategoryRepository(db);
-            iProductRepository = new ProductRepository(db);
+            _db = db;   
         }
         /*this save function is not part of model or controller, so we move it to unitOfwork.
-      public void Save()
-      {
-          _db.SaveChanges();
-      }*/
         public void Save()
         {
             _db.SaveChanges();
+        }*/
+        public void Update(Product product)
+        {
+            _db.Products.Update(product);
         }
+
     }
 }
