@@ -3,8 +3,10 @@ using BookStore.DataAcess.Data;
 using BookStore.DataAcess.Models;
 using BookStore.DataAcess.Repository;
 using BookStore.DataAcess.Repository.IRepository;
+using BookStore.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookStore.DataAcess.Controllers
 {
@@ -14,9 +16,11 @@ namespace BookStore.DataAcess.Controllers
         /*  replace by UnitOfWork
           private readonly ICategoryRepository _categoryRepo;*/
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -26,46 +30,123 @@ namespace BookStore.DataAcess.Controllers
               List<Category> categories = _categoryRepo.GetAll().ToList();*/
             /*   ApplicationDbContext implementation
                   List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();*/
+            //using projects to get listOfCategory
             return View(products);
         }
-
-        public IActionResult Create()
+        //Convert to upsert
+        /*  public IActionResult Create()
+          {
+              ProductVM productVM = new()
+              {
+                  Products = new Product(),
+                 categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
+                  u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() })
+              };
+              return View(productVM);
+          }*/
+        //
+        public IActionResult Upsert(int? id)
         {
-            return View();
+            ProductVM productVM = new()
+            {
+                Products = new Product(),
+                categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
+                u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() })
+            };
+            if (id == null || id == 0)
+            {
+                //create
+                return View(productVM);
+            }
+            else
+            {
+                //update
+                productVM.Products = _unitOfWork.iProductRepository.Get(u => u.Id == id);
+                return View(productVM);
+            }
+
         }
         [HttpPost]
         //after data is filled
-        public IActionResult Create(Product obj)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file, int? id)
         {
-            //custom validation
-            if (obj.Title == obj.Description.ToString())
+
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError("name", "The Title cannot exactly match the Description.");
+                if (productVM.Products.Id == 0)
+                {
+                    _unitOfWork.iProductRepository.Add(productVM.Products);
+                }
+                else
+                {
+                    _unitOfWork.iProductRepository.Update(productVM.Products);
+                }
+                _unitOfWork.Save();
+                //paht only to wwwwroot folder
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = @"images\products\product-" + productVM.Products.Id;
+                    string finalPath = Path.Combine(wwwRootPath, productPath);
+
+                    if (!Directory.Exists(finalPath))
+                        Directory.CreateDirectory(finalPath);
+
+                    using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    productVM.Products.ImageUrl = @"images\products\" + fileName;
+
+                    _unitOfWork.iProductRepository.Add(productVM.Products);
+                    _unitOfWork.Save();
+
+                }
+                TempData["success"] = "Category created successfully";
+                return RedirectToAction("Index");
             }
-            /* _db.Categories.Add(obj);
+            else
+            {
+                productVM.categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
+                        u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
+                return View(productVM);
+
+            }
+        }
+
+
+
+        //converted to Upsert
+        /*public IActionResult Create(ProductVM productVM, IFormFile? file)
+        {
+
+            *//* _db.Categories.Add(obj);
              _db.SaveChanges();*/
-            /* convert into Repo pattern
-             _categoryRepo.Add(obj);*/
+        /* convert into Repo pattern
+         _categoryRepo.Add(obj);*//*
 
-            //unitOfWork
-            _unitOfWork.iProductRepository.Add(obj);
-            //save is only of UnitOfWork not icategory
+        //unitOfWork
+
+        if (ModelState.IsValid)
+        {
+            _unitOfWork.iProductRepository.Add(productVM.Products);
             _unitOfWork.Save();
-
-            //added for toaster notification 
-            TempData["success"] = "Products created successfully";
+            TempData["success"] = "Category created successfully";
             return RedirectToAction("Index");
-
-            /* if (ModelState.IsValid)
-             {
-                 _unitOfWork.Category.Add(obj);
-                 _unitOfWork.Save();
-                 TempData["success"] = "Category created successfully";
-                 return RedirectToAction("Index");
-             }*/
-
+        }
+        else
+        {
+            productVM.categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
+                    u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
+            return View(productVM);
 
         }
+
+        //save is only of UnitOfWork not icategory
+
+    }*/
         public IActionResult Edit(int? id)
         {
             if (id == null || id == 0)
