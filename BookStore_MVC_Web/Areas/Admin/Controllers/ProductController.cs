@@ -3,6 +3,7 @@ using BookStore.DataAcess.Data;
 using BookStore.DataAcess.Models;
 using BookStore.DataAcess.Repository;
 using BookStore.DataAcess.Repository.IRepository;
+using BookStore.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,42 +34,42 @@ namespace BookStore.DataAcess.Controllers
 
         public IActionResult Create()
         {
-            IEnumerable<SelectListItem> categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
-                u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
-            ViewBag.CategoryList = categoryList;
-            return View();
+            ProductVM productVM = new()
+            {
+                Products = new Product(),
+               categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
+                u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() })
+            };
+            return View(productVM);
         }
         [HttpPost]
         //after data is filled
-        public IActionResult Create(Product obj)
+        public IActionResult Create(ProductVM productVM)
         {
-            //custom validation
-            if (obj.Title == obj.Description.ToString())
-            {
-                ModelState.AddModelError("name", "The Title cannot exactly match the Description.");
-            }
+         
             /* _db.Categories.Add(obj);
              _db.SaveChanges();*/
             /* convert into Repo pattern
              _categoryRepo.Add(obj);*/
 
             //unitOfWork
-            _unitOfWork.iProductRepository.Add(obj);
+
+            if (ModelState.IsValid)
+            {
+                _unitOfWork.iProductRepository.Add(productVM.Products);
+                _unitOfWork.Save();
+                TempData["success"] = "Category created successfully";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                productVM.categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
+                        u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
+                return View(productVM);
+                
+            }
+            
             //save is only of UnitOfWork not icategory
-            _unitOfWork.Save();
-
-            //added for toaster notification 
-            TempData["success"] = "Products created successfully";
-            return RedirectToAction("Index");
-
-            /* if (ModelState.IsValid)
-             {
-                 _unitOfWork.Category.Add(obj);
-                 _unitOfWork.Save();
-                 TempData["success"] = "Category created successfully";
-                 return RedirectToAction("Index");
-             }*/
-
 
         }
         public IActionResult Edit(int? id)
