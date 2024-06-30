@@ -16,9 +16,11 @@ namespace BookStore.DataAcess.Controllers
         /*  replace by UnitOfWork
           private readonly ICategoryRepository _categoryRepo;*/
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -43,7 +45,7 @@ namespace BookStore.DataAcess.Controllers
               return View(productVM);
           }*/
         //
-        public IActionResult Upsert(int ? id)
+        public IActionResult Upsert(int? id)
         {
             ProductVM productVM = new()
             {
@@ -51,7 +53,7 @@ namespace BookStore.DataAcess.Controllers
                 categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
                 u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() })
             };
-            if(id==null || id==0)
+            if (id == null || id == 0)
             {
                 //create
                 return View(productVM);
@@ -62,16 +64,46 @@ namespace BookStore.DataAcess.Controllers
                 productVM.Products = _unitOfWork.iProductRepository.Get(u => u.Id == id);
                 return View(productVM);
             }
-            
+
         }
         [HttpPost]
         //after data is filled
-        public IActionResult Upsert(ProductVM productVM,IFormFile? file, int? id)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file, int? id)
         {
+
             if (ModelState.IsValid)
             {
-                _unitOfWork.iProductRepository.Add(productVM.Products);
+                if (productVM.Products.Id == 0)
+                {
+                    _unitOfWork.iProductRepository.Add(productVM.Products);
+                }
+                else
+                {
+                    _unitOfWork.iProductRepository.Update(productVM.Products);
+                }
                 _unitOfWork.Save();
+                //paht only to wwwwroot folder
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = @"images\products\product-" + productVM.Products.Id;
+                    string finalPath = Path.Combine(wwwRootPath, productPath);
+
+                    if (!Directory.Exists(finalPath))
+                        Directory.CreateDirectory(finalPath);
+
+                    using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    productVM.Products.ImageUrl = @"images\products\" + fileName;
+
+                    _unitOfWork.iProductRepository.Add(productVM.Products);
+                    _unitOfWork.Save();
+
+                }
                 TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
             }
@@ -80,42 +112,41 @@ namespace BookStore.DataAcess.Controllers
                 productVM.categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
                         u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
                 return View(productVM);
-                
-            }
-            
-            //save is only of UnitOfWork not icategory
 
+            }
         }
-       
+
+
+
         //converted to Upsert
         /*public IActionResult Create(ProductVM productVM, IFormFile? file)
         {
 
             *//* _db.Categories.Add(obj);
              _db.SaveChanges();*/
-            /* convert into Repo pattern
-             _categoryRepo.Add(obj);*//*
+        /* convert into Repo pattern
+         _categoryRepo.Add(obj);*//*
 
-            //unitOfWork
+        //unitOfWork
 
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.iProductRepository.Add(productVM.Products);
-                _unitOfWork.Save();
-                TempData["success"] = "Category created successfully";
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                productVM.categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
-                        u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
-                return View(productVM);
+        if (ModelState.IsValid)
+        {
+            _unitOfWork.iProductRepository.Add(productVM.Products);
+            _unitOfWork.Save();
+            TempData["success"] = "Category created successfully";
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            productVM.categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
+                    u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
+            return View(productVM);
 
-            }
+        }
 
-            //save is only of UnitOfWork not icategory
+        //save is only of UnitOfWork not icategory
 
-        }*/
+    }*/
         public IActionResult Edit(int? id)
         {
             if (id == null || id == 0)
