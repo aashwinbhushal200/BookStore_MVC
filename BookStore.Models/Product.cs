@@ -46,6 +46,8 @@ namespace BookStore.DataAcess.Models
 
         public Category Category { get; set; }
 
+        public string ImageUrl { get; set; }
+
 
 
         //public List<ProductImage> ProductImages { get; set; }
