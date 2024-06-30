@@ -31,29 +31,43 @@ namespace BookStore.DataAcess.Controllers
             //using projects to get listOfCategory
             return View(products);
         }
-
-        public IActionResult Create()
+        //Convert to upsert
+        /*  public IActionResult Create()
+          {
+              ProductVM productVM = new()
+              {
+                  Products = new Product(),
+                 categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
+                  u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() })
+              };
+              return View(productVM);
+          }*/
+        //
+        public IActionResult Upsert(int ? id)
         {
             ProductVM productVM = new()
             {
                 Products = new Product(),
-               categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
+                categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
                 u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() })
             };
-            return View(productVM);
+            if(id==null || id==0)
+            {
+                //create
+                return View(productVM);
+            }
+            else
+            {
+                //update
+                productVM.Products = _unitOfWork.iProductRepository.Get(u => u.Id == id);
+                return View(productVM);
+            }
+            
         }
         [HttpPost]
         //after data is filled
-        public IActionResult Create(ProductVM productVM)
+        public IActionResult Upsert(ProductVM productVM,IFormFile? file, int? id)
         {
-         
-            /* _db.Categories.Add(obj);
-             _db.SaveChanges();*/
-            /* convert into Repo pattern
-             _categoryRepo.Add(obj);*/
-
-            //unitOfWork
-
             if (ModelState.IsValid)
             {
                 _unitOfWork.iProductRepository.Add(productVM.Products);
@@ -72,6 +86,36 @@ namespace BookStore.DataAcess.Controllers
             //save is only of UnitOfWork not icategory
 
         }
+       
+        //converted to Upsert
+        /*public IActionResult Create(ProductVM productVM, IFormFile? file)
+        {
+
+            *//* _db.Categories.Add(obj);
+             _db.SaveChanges();*/
+            /* convert into Repo pattern
+             _categoryRepo.Add(obj);*//*
+
+            //unitOfWork
+
+            if (ModelState.IsValid)
+            {
+                _unitOfWork.iProductRepository.Add(productVM.Products);
+                _unitOfWork.Save();
+                TempData["success"] = "Category created successfully";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                productVM.categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
+                        u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
+                return View(productVM);
+
+            }
+
+            //save is only of UnitOfWork not icategory
+
+        }*/
         public IActionResult Edit(int? id)
         {
             if (id == null || id == 0)
