@@ -5,6 +5,7 @@ using BookStore.DataAcess.Repository;
 using BookStore.DataAcess.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookStore.DataAcess.Controllers
 {
@@ -26,11 +27,15 @@ namespace BookStore.DataAcess.Controllers
               List<Category> categories = _categoryRepo.GetAll().ToList();*/
             /*   ApplicationDbContext implementation
                   List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();*/
+            //using projects to get listOfCategory
             return View(products);
         }
 
         public IActionResult Create()
         {
+            IEnumerable<SelectListItem> categoryList = _unitOfWork.iCategoryRepository.GetAll().Select(
+                u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
+            ViewBag.CategoryList = categoryList;
             return View();
         }
         [HttpPost]
