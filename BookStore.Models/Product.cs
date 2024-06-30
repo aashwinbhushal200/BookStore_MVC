@@ -41,11 +41,11 @@ namespace BookStore.DataAcess.Models
         [Range(1, 1000)]
         public double Price100 { get; set; }
 
-        /*public int CategoryId { get; set; }
+        public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
-        
+
         public Category Category { get; set; }
-        */
+
 
 
         //public List<ProductImage> ProductImages { get; set; }
