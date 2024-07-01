@@ -73,6 +73,37 @@ namespace BookStore.DataAcess.Controllers
 
             if (ModelState.IsValid)
             {
+
+                //paht only to wwwwroot folder
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = @"images\products\product-" + productVM.Products.Id;
+                    string finalPath = Path.Combine(wwwRootPath, productPath);
+                    /*
+                                        if (!Directory.Exists(finalPath))
+                                            Directory.CreateDirectory(finalPath);*/
+                    //check if old image exists then delete
+                    if (!string.IsNullOrEmpty(productVM.Products.ImageUrl))
+                    {
+                        var oldImagepath = Path.Combine(wwwRootPath, productVM.Products.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImagepath))
+                        {
+                            System.IO.File.Delete(oldImagepath);
+                        }
+
+                    }
+
+                    _unitOfWork.Save();
+
+                    using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    productVM.Products.ImageUrl = @"images\products\" + fileName;
+                }
                 if (productVM.Products.Id == 0)
                 {
                     _unitOfWork.iProductRepository.Add(productVM.Products);
@@ -82,28 +113,6 @@ namespace BookStore.DataAcess.Controllers
                     _unitOfWork.iProductRepository.Update(productVM.Products);
                 }
                 _unitOfWork.Save();
-                //paht only to wwwwroot folder
-                string wwwRootPath = _webHostEnvironment.WebRootPath;
-                if (file != null)
-                {
-
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string productPath = @"images\products\product-" + productVM.Products.Id;
-                    string finalPath = Path.Combine(wwwRootPath, productPath);
-
-                    if (!Directory.Exists(finalPath))
-                        Directory.CreateDirectory(finalPath);
-
-                    using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    }
-                    productVM.Products.ImageUrl = @"images\products\" + fileName;
-
-                    _unitOfWork.iProductRepository.Add(productVM.Products);
-                    _unitOfWork.Save();
-
-                }
                 TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
             }
