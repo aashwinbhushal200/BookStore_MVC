@@ -215,6 +215,15 @@ namespace BookStore.DataAcess.Controllers
             return RedirectToAction("Index");
         }
 
+        #region api call
+        [HttpGet]
+        public IActionResult GetAll(int id)
+        {
+            List<Product> products = _unitOfWork.iProductRepository.GetAll(includeProperties: "Category").ToList();
+
+            return Json(new { Data = products });
+        }
+        #endregion
 
     }
 }

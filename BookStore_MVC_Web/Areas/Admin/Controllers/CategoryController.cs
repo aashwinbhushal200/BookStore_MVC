@@ -20,8 +20,10 @@ namespace BookStore.DataAcess.Controllers
         }
         public IActionResult Index()
         {
+            //includeProperties implementation
+            List<Category> categories = _unitOfWork.iCategoryRepository.GetAll(includeProperties: "Category").ToList();
             //unitOfWork implementation:
-            List<Category> categories = _unitOfWork.iCategoryRepository.GetAll().ToList();
+            //List<Category> categories = _unitOfWork.iCategoryRepository.GetAll().ToList();
             /*  repo pattern implementation
               List<Category> categories = _categoryRepo.GetAll().ToList();*/
             /*   ApplicationDbContext implementation
@@ -123,6 +125,15 @@ namespace BookStore.DataAcess.Controllers
             return RedirectToAction("Index");
         }
 
+        #region Api Calls
+        [HttpGet]
+        public IActionResult GetAll(int id)
+        {
+            List<Category> categories = _unitOfWork.iCategoryRepository.GetAll(includeProperties: "Category").ToList();
+
+            return Json(new { Data= categories });
+        }
+        #endregion Api Calls
 
     }
 }
