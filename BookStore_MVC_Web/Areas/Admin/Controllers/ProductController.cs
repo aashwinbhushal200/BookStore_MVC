@@ -24,8 +24,10 @@ namespace BookStore.DataAcess.Controllers
         }
         public IActionResult Index()
         {
+            ////include properties
+            List<Product> products = _unitOfWork.iProductRepository.GetAll(includeProperties:"Category").ToList();
             //unitOfWork implementation:
-            List<Product> products = _unitOfWork.iProductRepository.GetAll().ToList();
+            //List<Product> products = _unitOfWork.iProductRepository.GetAll().ToList();
             /*  repo pattern implementation
               List<Category> categories = _categoryRepo.GetAll().ToList();*/
             /*   ApplicationDbContext implementation

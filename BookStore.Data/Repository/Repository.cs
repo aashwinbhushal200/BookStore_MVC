@@ -22,8 +22,13 @@ namespace BookStore.DataAcess.Repository
           /* for eg dbset will be set to categories when constructor gets called.
             now it becomes as _db.Categories == dbSet*/
             this.dbSet = _dbContext.Set<T>();
-           // _db.Products.Include(u => u.Category).Include(u => u.CategoryId);
-            
+            // _db.Products.Include(u => u.Category).Include(u => u.CategoryId);
+           // _dbContext.Products.Include(u => u.Category);
+            //      include can have multiple properties:
+            _dbContext.Products.Include(u => u.Category).Include(u => u.CategoryId);
+
+
+
         }
 
         public void Add(T entity)
@@ -44,6 +49,7 @@ namespace BookStore.DataAcess.Repository
             }
 
             query = query.Where(filter);
+            //include properties
             if (!string.IsNullOrEmpty(includeProperties)) {
                 foreach (var includeProp in includeProperties
                     .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) {
@@ -60,7 +66,8 @@ namespace BookStore.DataAcess.Repository
             if (filter != null) {
                 query = query.Where(filter);
             }
-			if (!string.IsNullOrEmpty(includeProperties))
+            ////include properties
+            if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach(var includeProp in includeProperties
                     .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
