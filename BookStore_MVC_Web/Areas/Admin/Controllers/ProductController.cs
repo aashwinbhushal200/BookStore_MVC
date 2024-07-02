@@ -197,6 +197,7 @@ namespace BookStore.DataAcess.Controllers
 
             return Json(new { Data = products });
         }
+        //added after ajax call made withs sweetalert
         [HttpDelete]
         public IActionResult Delete(int? id)
         {
