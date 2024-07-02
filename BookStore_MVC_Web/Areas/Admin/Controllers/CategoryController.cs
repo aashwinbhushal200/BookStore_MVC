@@ -21,7 +21,7 @@ namespace BookStore.DataAcess.Controllers
         public IActionResult Index()
         {
             //includeProperties implementation
-            List<Category> categories = _unitOfWork.iCategoryRepository.GetAll(includeProperties: "Category").ToList();
+            List<Category> categories = _unitOfWork.iCategoryRepository.GetAll().ToList();
             //unitOfWork implementation:
             //List<Category> categories = _unitOfWork.iCategoryRepository.GetAll().ToList();
             /*  repo pattern implementation
@@ -129,7 +129,7 @@ namespace BookStore.DataAcess.Controllers
         [HttpGet]
         public IActionResult GetAll(int id)
         {
-            List<Category> categories = _unitOfWork.iCategoryRepository.GetAll(includeProperties: "Category").ToList();
+            List<Category> categories = _unitOfWork.iCategoryRepository.GetAll().ToList();
 
             return Json(new { Data= categories });
         }

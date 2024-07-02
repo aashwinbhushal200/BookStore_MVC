@@ -25,7 +25,7 @@ namespace BookStore.DataAcess.Controllers
         public IActionResult Index()
         {
             ////include properties
-            List<Product> products = _unitOfWork.iProductRepository.GetAll(includeProperties:"Category").ToList();
+            List<Product> objProductList = _unitOfWork.iProductRepository.GetAll(includeProperties: "Category").ToList();
             //unitOfWork implementation:
             //List<Product> products = _unitOfWork.iProductRepository.GetAll().ToList();
             /*  repo pattern implementation
@@ -33,7 +33,7 @@ namespace BookStore.DataAcess.Controllers
             /*   ApplicationDbContext implementation
                   List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();*/
             //using projects to get listOfCategory
-            return View(products);
+            return View(objProductList);
         }
         //Convert to upsert
         /*  public IActionResult Create()
@@ -70,7 +70,7 @@ namespace BookStore.DataAcess.Controllers
         }
         [HttpPost]
         //after data is filled
-        public IActionResult Upsert(ProductVM productVM, IFormFile? file, int? id)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
 
             if (ModelState.IsValid)
