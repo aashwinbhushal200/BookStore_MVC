@@ -1,4 +1,5 @@
 ﻿using BookStore.DataAcess.Models;
+using BookStore.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,7 @@ namespace BookStore.DataAcess.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
         //data seeding 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
