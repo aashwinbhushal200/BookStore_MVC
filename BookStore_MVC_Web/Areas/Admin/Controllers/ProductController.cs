@@ -24,14 +24,16 @@ namespace BookStore.DataAcess.Controllers
         }
         public IActionResult Index()
         {
+            ////include properties
+            List<Product> objProductList = _unitOfWork.iProductRepository.GetAll(includeProperties: "Category").ToList();
             //unitOfWork implementation:
-            List<Product> products = _unitOfWork.iProductRepository.GetAll().ToList();
+            //List<Product> products = _unitOfWork.iProductRepository.GetAll().ToList();
             /*  repo pattern implementation
               List<Category> categories = _categoryRepo.GetAll().ToList();*/
             /*   ApplicationDbContext implementation
                   List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();*/
             //using projects to get listOfCategory
-            return View(products);
+            return View(objProductList);
         }
         //Convert to upsert
         /*  public IActionResult Create()
@@ -68,11 +70,42 @@ namespace BookStore.DataAcess.Controllers
         }
         [HttpPost]
         //after data is filled
-        public IActionResult Upsert(ProductVM productVM, IFormFile? file, int? id)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
 
             if (ModelState.IsValid)
             {
+
+                //paht only to wwwwroot folder
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = @"images\products\product-" + productVM.Products.Id;
+                    string finalPath = Path.Combine(wwwRootPath, productPath);
+                    /*
+                                        if (!Directory.Exists(finalPath))
+                                            Directory.CreateDirectory(finalPath);*/
+                    //check if old image exists then delete
+                    if (!string.IsNullOrEmpty(productVM.Products.ImageUrl))
+                    {
+                        var oldImagepath = Path.Combine(wwwRootPath, productVM.Products.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImagepath))
+                        {
+                            System.IO.File.Delete(oldImagepath);
+                        }
+
+                    }
+
+                    _unitOfWork.Save();
+
+                    using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    productVM.Products.ImageUrl = @"images\products\" + fileName;
+                }
                 if (productVM.Products.Id == 0)
                 {
                     _unitOfWork.iProductRepository.Add(productVM.Products);
@@ -82,28 +115,6 @@ namespace BookStore.DataAcess.Controllers
                     _unitOfWork.iProductRepository.Update(productVM.Products);
                 }
                 _unitOfWork.Save();
-                //paht only to wwwwroot folder
-                string wwwRootPath = _webHostEnvironment.WebRootPath;
-                if (file != null)
-                {
-
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string productPath = @"images\products\product-" + productVM.Products.Id;
-                    string finalPath = Path.Combine(wwwRootPath, productPath);
-
-                    if (!Directory.Exists(finalPath))
-                        Directory.CreateDirectory(finalPath);
-
-                    using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    }
-                    productVM.Products.ImageUrl = @"images\products\" + fileName;
-
-                    _unitOfWork.iProductRepository.Add(productVM.Products);
-                    _unitOfWork.Save();
-
-                }
                 TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
             }
@@ -176,34 +187,49 @@ namespace BookStore.DataAcess.Controllers
             return View();
 
         }
+    
+
+        #region api call
+        [HttpGet]
+        public IActionResult GetAll(int id)
+        {
+            List<Product> products = _unitOfWork.iProductRepository.GetAll(includeProperties: "Category").ToList();
+
+            return Json(new { Data = products });
+        }
+        //added after ajax call made withs sweetalert
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            if (id == null || id == 0)
+            var productToBeDeleted = _unitOfWork.iProductRepository.Get(u => u.Id == id);
+            if (productToBeDeleted == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Error while deleting" });
             }
-            Product? productFromDb = _unitOfWork.iProductRepository.Get(u => u.Id == id);
 
-            if (productFromDb == null)
+            string productPath = @"images\products\product-" + id;
+            string finalPath = Path.Combine(_webHostEnvironment.WebRootPath, productPath);
+
+            if (Directory.Exists(finalPath))
             {
-                return NotFound();
+                string[] filePaths = Directory.GetFiles(finalPath);
+                foreach (string filePath in filePaths)
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                Directory.Delete(finalPath);
             }
-            return View(productFromDb);
-        }
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int? id)
-        {
-            Product? obj = _unitOfWork.iProductRepository.Get(u => u.Id == id);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-            _unitOfWork.iProductRepository.Remove(obj);
+
+
+            _unitOfWork.iProductRepository.Remove(productToBeDeleted);
             _unitOfWork.Save();
-            TempData["success"] = "Product deleted successfully";
-            return RedirectToAction("Index");
+
+            return Json(new { success = true, message = "Delete Successful" });
         }
 
+
+        #endregion
 
     }
 }
