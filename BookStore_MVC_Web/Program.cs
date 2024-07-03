@@ -1,6 +1,7 @@
 using BookStore.DataAcess.Data;
 using BookStore.DataAcess.Repository;
 using BookStore.DataAcess.Repository.IRepository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 /*builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();*
   Replaced by UnitOfwork--> calls categoryRepo*/
-builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>(); 
+//binding entityFW with table identity.
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
 
 var app = builder.Build();
 
@@ -28,7 +32,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllerRoute(
