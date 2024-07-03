@@ -23,6 +23,11 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
             IEnumerable<Product> productList = _unitOfWork.iProductRepository.GetAll(includeProperties: "Category");
             return View(productList);
         }
+        public IActionResult Details(int productId)
+        {
+            Product product =_unitOfWork.iProductRepository.Get(u=>u.Id==productId, includeProperties: "Category");
+            return View(product);
+        }
 
         public IActionResult Privacy()
         {
