@@ -4,6 +4,7 @@ using BookStore.DataAcess.Models;
 using BookStore.DataAcess.Repository;
 using BookStore.DataAcess.Repository.IRepository;
 using BookStore.Models.ViewModels;
+using BookStore.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace BookStore.DataAcess.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
         /*  replace by UnitOfWork

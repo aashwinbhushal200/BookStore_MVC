@@ -1,4 +1,4 @@
-﻿namespace BookStore.DataAcess.Utility
+﻿namespace BookStore.Utility
 {
     public static class SD
     {
