@@ -1,6 +1,9 @@
 using BookStore.DataAcess.Data;
 using BookStore.DataAcess.Repository;
 using BookStore.DataAcess.Repository.IRepository;
+using BookStore.Utility;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +15,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 /*builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();*
   Replaced by UnitOfwork--> calls categoryRepo*/
-builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+//add razorPage support where identity was created
+
+builder.Services.AddRazorPages();
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>(); 
+builder.Services.AddScoped<IEmailSender,EmailSender>(); 
+//binding entityFW with table identity.
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+//adding role manager
+builder.Services.AddIdentity<IdentityUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
 
 var app = builder.Build();
 
@@ -28,8 +45,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication(); 
 app.UseAuthorization();
+app.MapRazorPages();
+
 
 app.MapControllerRoute(
     name: "default",

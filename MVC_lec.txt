@@ -1,0 +1,6 @@
+//adding identity
+added-ApplicationUser to extend IdentityUser properties.
+//currrenlty Idenetity user is default9(discriminator) , now need to change (discriminator) application user.
+//adding roles to identity
+//identity path in url is missing: add in ConfigureApplicationCookie options. 
+

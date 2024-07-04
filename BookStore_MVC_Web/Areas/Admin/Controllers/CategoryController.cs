@@ -3,12 +3,15 @@ using BookStore.DataAcess.Data;
 using BookStore.DataAcess.Models;
 using BookStore.DataAcess.Repository;
 using BookStore.DataAcess.Repository.IRepository;
+using BookStore.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.DataAcess.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles=SD.Role_Admin)]
+
     public class CategoryController : Controller
     {
         /*  replace by UnitOfWork
