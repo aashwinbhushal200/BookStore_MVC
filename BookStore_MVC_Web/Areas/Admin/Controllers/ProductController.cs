@@ -75,32 +75,28 @@ namespace BookStore.DataAcess.Controllers
 
             if (ModelState.IsValid)
             {
-
-                //paht only to wwwwroot folder
+                //pahthonly to wwwwroot folder
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
+                //image upload 
                 if (file != null)
                 {
-
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string productPath = @"images\products\product-" + productVM.Products.Id;
-                    string finalPath = Path.Combine(wwwRootPath, productPath);
-                    /*
-                                        if (!Directory.Exists(finalPath))
-                                            Directory.CreateDirectory(finalPath);*/
-                    //check if old image exists then delete
-                    if (!string.IsNullOrEmpty(productVM.Products.ImageUrl))
+                    string productPath = Path.Combine(wwwRootPath, @"images\products");
+                    string finalPath = Path.Combine(productPath, fileName);
+                    //if image is not null then its update image.
+                    if(!string.IsNullOrEmpty(productVM.Products.ImageUrl))
                     {
-                        var oldImagepath = Path.Combine(wwwRootPath, productVM.Products.ImageUrl.TrimStart('\\'));
-                        if (System.IO.File.Exists(oldImagepath))
+                        //delete the old image
+                        var oldImagePath =
+                                   Path.Combine(_webHostEnvironment.WebRootPath,
+                                   productVM.Products.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImagePath))
                         {
-                            System.IO.File.Delete(oldImagepath);
+                            System.IO.File.Delete(oldImagePath);
                         }
-
                     }
 
-                    _unitOfWork.Save();
-
-                    using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+                    using (var fileStream = new FileStream(finalPath, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     }
@@ -187,7 +183,7 @@ namespace BookStore.DataAcess.Controllers
             return View();
 
         }
-    
+
 
         #region api call
         [HttpGet]
