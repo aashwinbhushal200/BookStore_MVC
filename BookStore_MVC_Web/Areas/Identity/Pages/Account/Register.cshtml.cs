@@ -196,7 +196,7 @@ namespace BookStore_MVC_Web.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
