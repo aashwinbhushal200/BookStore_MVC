@@ -15,6 +15,7 @@ namespace BookStore.DataAcess.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<Company> Companies { get; set; }
+        public DbSet<ShoppingCart> ShoppingCart { get; set; }
 
         //data seeding 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
