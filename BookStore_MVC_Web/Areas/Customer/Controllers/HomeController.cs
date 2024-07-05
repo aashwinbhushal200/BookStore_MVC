@@ -53,6 +53,7 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
             }
             else
                 _unitOfWork.iShoppingCartRepository.Add(shoppingCart);
+            TempData["Success"] = "cart upated success";
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
