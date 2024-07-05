@@ -39,6 +39,7 @@ namespace BookStore.DataAcess.Repository
 
         public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
+            //bool tracked = false for EF core not update itself eg shopping cart. 
             IQueryable<T> query;
             if (tracked) {
                  query= dbSet;

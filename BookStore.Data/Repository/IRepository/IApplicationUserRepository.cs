@@ -1,5 +1,5 @@
 ﻿using BookStore.DataAcess.Models;
-using BookStore.DataAcess.Models;
+using BookStore.Models;
 using Microsoft.EntityFrameworkCore.Update.Internal;
 using System;
 using System.Collections.Generic;
@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace BookStore.DataAcess.Repository.IRepository
 {
-    public interface IProductRepository : IRepository<Product>
+    public interface IApplicationUserRepository :IRepository<ApplicationUser>
     { 
         //T - Category
-        void  Update(Product product);
+        
         
         
     }   

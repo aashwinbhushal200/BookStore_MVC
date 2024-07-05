@@ -12,6 +12,11 @@ namespace BookStore.DataAcess.Repository
     {
         public ICategoryRepository iCategoryRepository { get; set; }
         public IProductRepository iProductRepository { get; set; }
+        public ICompanyRepository iCompanyRepository { get; set; }
+        public IShoppingCartRepository iShoppingCartRepository { get; set; }
+        public IApplicationUserRepository iApplicationUserRepository { get; set; }
+
+       
         private ApplicationDbContext _db;
 
          public UnitOfWork(ApplicationDbContext db) 
@@ -19,6 +24,9 @@ namespace BookStore.DataAcess.Repository
             _db = db;
             iCategoryRepository=new CategoryRepository(db);
             iProductRepository = new ProductRepository(db);
+            iCompanyRepository = new CompanyRepository(db);
+            iShoppingCartRepository = new ShoppingCartRepository(db);
+            iApplicationUserRepository=new ApplicationUserRepository(db);
         }
         /*this save function is not part of model or controller, so we move it to unitOfwork.
       public void Save()

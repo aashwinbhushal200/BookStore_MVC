@@ -11,6 +11,7 @@ namespace BookStore.DataAcess.Repository.IRepository
     {
         //T - Category
         IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter=null, string? includeProperties = null);
+        //bool tracked = false for EF core not update itself 
         T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false);
         void Add(T entity);
         void Remove(T entity);
