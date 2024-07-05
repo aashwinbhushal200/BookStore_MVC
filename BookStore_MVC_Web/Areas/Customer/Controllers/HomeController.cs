@@ -1,6 +1,7 @@
 using BookStore.DataAcess.Models;
 using BookStore.DataAcess.Repository;
 using BookStore.DataAcess.Repository.IRepository;
+using BookStore.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -25,8 +26,13 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
         }
         public IActionResult Details(int productId)
         {
-            Product product =_unitOfWork.iProductRepository.Get(u=>u.Id==productId, includeProperties: "Category");
-            return View(product);
+            ShoppingCart cartItem = new ShoppingCart
+            {
+                Product = _unitOfWork.iProductRepository.Get(u => u.Id == productId, includeProperties: "Category"),
+                Count = 1,
+                ProductId = productId,
+            };
+            return View(cartItem);
         }
 
         public IActionResult Privacy()
