@@ -6,6 +6,7 @@
 //If we have to work with our user for any reason, then we have to create ApplicationUserRepository
 /*Only logged in user should be able to post shopping cart items 
  Authorize only to check if user is logged in*/
+/*Adding to cart is causing mutliple records for same product*/
 
 
 
