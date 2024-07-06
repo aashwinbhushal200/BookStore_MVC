@@ -20,6 +20,8 @@ namespace BookStore.Models {
         [ValidateNever]
         public ApplicationUser ApplicationUser { get; set; }
 
+
+        //not mapped so that it doesn't get added to db .
 		[NotMapped]
 		public double Price { get; set; }
 	}
