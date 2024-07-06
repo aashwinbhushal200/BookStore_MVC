@@ -52,9 +52,8 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
 
 		public IActionResult Summary()
 		{
-			return View();
-		}
-			/*var claimsIdentity = (ClaimsIdentity)User.Identity;
+
+			var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             ShoppingCartVM = new()
@@ -64,7 +63,7 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
                 OrderHeader = new()
             };
 
-            ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+            ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.iApplicationUserRepository.Get(u => u.Id == userId);
 
             ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.ApplicationUser.Name;
             ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
@@ -80,8 +79,8 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
                 cart.Price = GetPriceBasedOnQuantity(cart);
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
             }
-            
-        }*/
+			return View(ShoppingCartVM);
+        }
 
 			/*	[HttpPost]
 			[ActionName("Summary")]

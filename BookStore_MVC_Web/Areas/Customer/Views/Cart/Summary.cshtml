@@ -1,5 +1,5 @@
 ﻿
-
+@model ShoppingCartVM
 <form method="post">
 	<br />
 	<div class="container">
@@ -29,9 +29,9 @@
 							<div class="row my-1">
 								<div class="col-3">
 									<label>Name</label>
-							@* 	</div>
+							</div>
 								<div class="col-9">
-									<input asp-for="Name" class="form-control" />
+									<input asp-for="OrderHeader.Name" class="form-control" />
 									<span asp-validation-for="OrderHeader.Name" class="text-danger"></span>
 								</div>
 							</div>
@@ -79,7 +79,7 @@
 									<input asp-for="OrderHeader.PostalCode" class="form-control" />
 									<span asp-validation-for="OrderHeader.PostalCode" class="text-danger"></span>
 								</div>
-							</div> *@
+							</div>
 						</div>
 						<div class="col-12 col-lg-5 offset-lg-1">
 							<h4 class="d-flex justify-content-between align-items-center mb-3">
