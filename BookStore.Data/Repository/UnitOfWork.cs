@@ -1,12 +1,12 @@
-﻿using BookStore.DataAcess.Data;
-using BookStore.DataAcess.Repository.IRepository;
+﻿using BookStore.DataAccess.Repository.IRepository;
+using BookStore.DataAccess.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookStore.DataAcess.Repository
+namespace BookStore.DataAccess.Repository
 {
     public class UnitOfWork:IUnitOfWork
     {
@@ -15,9 +15,11 @@ namespace BookStore.DataAcess.Repository
         public ICompanyRepository iCompanyRepository { get; set; }
         public IShoppingCartRepository iShoppingCartRepository { get; set; }
         public IApplicationUserRepository iApplicationUserRepository { get; set; }
+		public IOrderHeaderRepository OrderHeader { get; private set; }
+		public IOrderDetailRepository OrderDetail { get; private set; }
 
-       
-        private ApplicationDbContext _db;
+
+		private ApplicationDbContext _db;
 
          public UnitOfWork(ApplicationDbContext db) 
         {

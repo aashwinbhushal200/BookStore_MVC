@@ -1,13 +1,8 @@
-﻿using BookStore.DataAcess.Data;
-using BookStore.DataAcess.Models;
-using BookStore.DataAcess.Repository.IRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BookStore.DataAccess.Data;
+using BookStore.DataAccess.Models;
+using BookStore.DataAccess.Repository.IRepository;
 
-namespace BookStore.DataAcess.Repository
+namespace BookStore.DataAccess.Repository
 {
     public class CategoryRepository : Repository<Category>, ICategoryRepository
     {

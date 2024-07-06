@@ -1,6 +1,6 @@
-using BookStore.DataAcess.Models;
-using BookStore.DataAcess.Repository;
-using BookStore.DataAcess.Repository.IRepository;
+using BookStore.DataAccess.Models;
+using BookStore.DataAccess.Repository;
+using BookStore.DataAccess.Repository.IRepository;
 using BookStore.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

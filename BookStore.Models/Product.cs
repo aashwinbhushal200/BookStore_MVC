@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace BookStore.DataAcess.Models
+namespace BookStore.DataAccess.Models
 {
     public class Product
     {
