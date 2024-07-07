@@ -131,7 +131,7 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
 				_unitOfWork.Save();
 			}
 
-			/*if (applicationUser.CompanyId.GetValueOrDefault() == 0)
+            /*if (applicationUser.CompanyId.GetValueOrDefault() == 0)
 			{
 				//it is a regular customer account and we need to capture payment
 				//stripe logic
@@ -170,16 +170,17 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
 				Response.Headers.Add("Location", session.Url);
 				return new StatusCodeResult(303);
 
-			}
-
-			return RedirectToAction(nameof(OrderConfirmation), new { id = ShoppingCartVM.OrderHeader.Id });*/
-			return View(shoppingCartVM);
-		}
+			}*/
 
 
-		/*  public IActionResult OrderConfirmation(int id) {
+            return RedirectToAction(nameof(OrderConfirmation), new { id = shoppingCartVM.OrderHeader.Id });
+        }
 
-			  OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
+
+          public IActionResult OrderConfirmation(int id) 
+		{
+/*
+			  OrderHeader orderHeader = _unitOfWork.iOrderHeaderRepository.Get(u => u.Id == id, includeProperties: "ApplicationUser");
 			  if(orderHeader.PaymentStatus!= SD.PaymentStatusDelayedPayment) {
 				  //this is an order by customer
 
@@ -202,13 +203,13 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
 				  .GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
 
 			  _unitOfWork.iShoppingCartRepository.RemoveRange(shoppingCarts);
-			  _unitOfWork.Save();
+			  _unitOfWork.Save();*/
 
 			  return View(id);
-		  }*/
+		  }
 
 
-		public IActionResult Plus(int cartId)
+        public IActionResult Plus(int cartId)
 		{
 			var cartFromDb = _unitOfWork.iShoppingCartRepository.Get(u => u.Id == cartId);
 			cartFromDb.Count += 1;
