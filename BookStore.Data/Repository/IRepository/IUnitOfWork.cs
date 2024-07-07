@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookStore.DataAcess.Repository.IRepository
+namespace BookStore.DataAccess.Repository.IRepository
 {
     public interface IUnitOfWork
     {
@@ -15,6 +15,8 @@ namespace BookStore.DataAcess.Repository.IRepository
         ICompanyRepository iCompanyRepository { get; }
         IShoppingCartRepository iShoppingCartRepository { get; }
         IApplicationUserRepository iApplicationUserRepository { get; }
+        IOrderHeaderRepository iOrderHeaderRepository { get; }
+		IOrderDetailRepository iOrderDetailRepository { get; }
         void Save();
         
     }

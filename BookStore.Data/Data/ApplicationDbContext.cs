@@ -1,9 +1,9 @@
-﻿using BookStore.DataAcess.Models;
+﻿using BookStore.DataAccess.Models;
 using BookStore.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookStore.DataAcess.Data
+namespace BookStore.DataAccess.Data
 {
     public class ApplicationDbContext: IdentityDbContext
     {
@@ -16,9 +16,11 @@ namespace BookStore.DataAcess.Data
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<ShoppingCart> ShoppingCart { get; set; }
+		public DbSet<OrderHeader> OrderHeaders { get; set; }
+		public DbSet<OrderDetail> OrderDetails { get; set; }
 
-        //data seeding 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+		//data seeding 
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //keys of identity tables are mapped in the on model creating
             base.OnModelCreating(modelBuilder);

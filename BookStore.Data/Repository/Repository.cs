@@ -4,12 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using BookStore.DataAcess.Repository.IRepository;
-using BookStore.DataAcess.Data;
+using BookStore.DataAccess.Repository.IRepository;
+using BookStore.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace BookStore.DataAcess.Repository
+namespace BookStore.DataAccess.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {

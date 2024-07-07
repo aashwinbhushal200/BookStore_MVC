@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace BookStore.DataAcess.Migrations
+namespace BookStore.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class shoppingCartadded : Migration

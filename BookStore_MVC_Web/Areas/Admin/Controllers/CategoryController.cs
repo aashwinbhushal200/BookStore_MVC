@@ -1,13 +1,14 @@
 ﻿
-using BookStore.DataAcess.Data;
-using BookStore.DataAcess.Models;
-using BookStore.DataAcess.Repository;
-using BookStore.DataAcess.Repository.IRepository;
+using BookStore.DataAccess.Data;
+using BookStore.DataAccess.Models;
+using BookStore.DataAccess.Repository;
+using BookStore.DataAccess.Repository.IRepository;
+using BookStore.DataAccess.Repository.IRepository;
 using BookStore.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BookStore.DataAcess.Controllers
+namespace BookStore.DataAccess.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles=SD.Role_Admin)]

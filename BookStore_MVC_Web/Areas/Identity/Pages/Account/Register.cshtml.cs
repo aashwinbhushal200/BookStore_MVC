@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
-using BookStore.DataAcess.Repository.IRepository;
+using BookStore.DataAccess.Repository.IRepository;
 using BookStore.Models;
 using BookStore.Utility;
 using Microsoft.AspNetCore.Authentication;
