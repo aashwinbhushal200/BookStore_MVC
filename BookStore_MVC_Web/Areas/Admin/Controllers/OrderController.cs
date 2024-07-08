@@ -29,7 +29,7 @@ namespace BookStore.Areas.Admin.Controllers {
         public IActionResult Details(int orderId) {
             OrderVM = new() {
                 OrderHeader = _unitOfWork.iOrderHeaderRepository.Get(u => u.Id == orderId, includeProperties: "ApplicationUser"),
-               // OrderDetail = _unitOfWork.iOrderHeaderRepository.GetAll(u => u.OrderHeaderId == orderId, includeProperties: "Product")
+               OrderDetail = _unitOfWork.iOrderDetailRepository.GetAll(u => u.OrderHeaderId == orderId, includeProperties: "Product")
             };
 
             return View(OrderVM);
