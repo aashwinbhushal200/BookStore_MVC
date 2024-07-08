@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@* injecting HttpContextAccessor to utilize session  *@
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -72,7 +75,7 @@
 
                             </li>
                         }
-
+                       
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
                                 @await Component.InvokeAsync("ShoppingCart")
