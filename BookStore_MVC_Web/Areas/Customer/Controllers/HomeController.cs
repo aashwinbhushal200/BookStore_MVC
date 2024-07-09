@@ -24,6 +24,15 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
+            //get the cart value for logged in user.
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if(claims!=null)
+            {
+                HttpContext.Session.SetInt32(SD.SessionCart,
+                _unitOfWork.iShoppingCartRepository.GetAll(u => u.ApplicationUserId == claims.Value).Count());
+
+            }
             IEnumerable<Product> productList = _unitOfWork.iProductRepository.GetAll(includeProperties: "Category");
             return View(productList);
         }
