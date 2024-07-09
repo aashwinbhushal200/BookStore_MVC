@@ -29,7 +29,8 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
 		public IActionResult Index()
 		{
 
-			var claimsIdentity = (ClaimsIdentity)User.Identity;
+		
+		 	var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
 			shoppingCartVM = new()
@@ -38,6 +39,7 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
 				includeProperties: "Product"),
 				OrderHeader= new()
 			};
+		
 
 			//IEnumerable<ProductImage> productImages = _unitOfWork.ProductImage.GetAll();
 

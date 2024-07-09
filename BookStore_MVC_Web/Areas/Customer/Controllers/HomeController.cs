@@ -24,6 +24,7 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
+            /*	move it to ViewComponent
             //get the cart value for logged in user.
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -33,6 +34,7 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
                 _unitOfWork.iShoppingCartRepository.GetAll(u => u.ApplicationUserId == claims.Value).Count());
 
             }
+            */
             IEnumerable<Product> productList = _unitOfWork.iProductRepository.GetAll(includeProperties: "Category");
             return View(productList);
         }
@@ -54,8 +56,8 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-            shoppingCart.ApplicationUserId= userId;
-            ShoppingCart cartFromDb = _unitOfWork.iShoppingCartRepository.Get(u => u.ApplicationUserId == userId && u.ProductId== shoppingCart.ProductId);
+            shoppingCart.ApplicationUserId = userId;
+            ShoppingCart cartFromDb = _unitOfWork.iShoppingCartRepository.Get(u => u.ApplicationUserId == userId && u.ProductId == shoppingCart.ProductId);
             if (cartFromDb != null)
             {
                 cartFromDb.Count += shoppingCart.Count;
@@ -63,14 +65,14 @@ namespace BookStore_MVC_Web.Areas.Customer.Controllers
                 _unitOfWork.Save();
             }
             else
-            { 
+            {
                 //adding session to session while saving to cart
                 _unitOfWork.iShoppingCartRepository.Add(shoppingCart);
                 _unitOfWork.Save();
                 HttpContext.Session.SetInt32(SD.SessionCart,
                 _unitOfWork.iShoppingCartRepository.GetAll(u => u.ApplicationUserId == userId).Count());
             }
-                
+
             TempData["Success"] = "cart upated success";
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
