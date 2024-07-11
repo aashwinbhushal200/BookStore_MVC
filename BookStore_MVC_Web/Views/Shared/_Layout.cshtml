@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@* injecting HttpContextAccessor to utilize session  *@
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -41,7 +44,7 @@
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Customer" asp-controller="Privacy" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         @if (User.IsInRole(SD.Role_Admin))
                         {
@@ -72,9 +75,10 @@
 
                             </li>
                         }
-
+                       
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                @* viewcomponents ShoppingCart injected  *@
                                 @await Component.InvokeAsync("ShoppingCart")
                             </a>
                         </li>

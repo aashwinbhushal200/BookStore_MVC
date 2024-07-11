@@ -102,7 +102,7 @@ namespace BookStore.DataAccess.Controllers
                     {
                         file.CopyTo(fileStream);
                     }
-                    productVM.Products.ImageUrl = @"images\products\" + fileName;
+                    productVM.Products.ImageUrl = @"\images\products\" + fileName;
                 }
                 if (productVM.Products.Id == 0)
                 {

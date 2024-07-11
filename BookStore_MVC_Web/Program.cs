@@ -1,4 +1,5 @@
 using BookStore.DataAccess.Data;
+using BookStore.DataAccess.DbInitializer;
 using BookStore.DataAccess.Repository;
 using BookStore.DataAccess.Repository.IRepository;
 using BookStore.Utility;
@@ -16,7 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 /*builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();*
   Replaced by UnitOfwork--> calls categoryRepo*/
 //add razorPage support where identity was created
-
+//dbinitalizer setup
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>(); 
 builder.Services.AddScoped<IEmailSender,EmailSender>(); 
@@ -24,11 +26,24 @@ builder.Services.AddScoped<IEmailSender,EmailSender>();
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 //adding role manager
 builder.Services.AddIdentity<IdentityUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
     options.LogoutPath = $"/Identity/Account/Logout";
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
+//add session memory  
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(100);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+//facebook login
+builder.Services.AddAuthentication().AddFacebook(option => {
+    option.AppId = "1032094531706180";
+    option.AppSecret = "cdd2d7d224812020b133aba07c83c382";
 });
 
 var app = builder.Build();
@@ -48,10 +63,18 @@ app.UseRouting();
 app.UseAuthentication(); 
 app.UseAuthorization();
 app.MapRazorPages();
-
-
+app.UseSession();
+SeedDatabase();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+void SeedDatabase()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInitializer.Initialize();
+    }
+}

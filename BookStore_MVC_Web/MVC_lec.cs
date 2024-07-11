@@ -8,5 +8,9 @@
  Authorize only to check if user is logged in*/
 /*Adding to cart is causing mutliple records for same product*/
 
-
+/*View Component is similar to partial view except partial view has page model or code behind file for coding. 
+they don't use model binding, they depend on the data passed when calling the view component. 
+*/
+/*facebook login
+https://localhost:44303/signin-facebook*/
 
