@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BookStore.Models\BookStore.Models.csproj" />
+    <ProjectReference Include="..\BookStore.Utility\BookStore.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

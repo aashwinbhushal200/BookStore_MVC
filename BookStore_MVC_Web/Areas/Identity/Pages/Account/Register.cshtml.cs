@@ -211,7 +211,7 @@ namespace BookStore_MVC_Web.Areas.Identity.Pages.Account
                         }
                         
                         return LocalRedirect(returnUrl);
-                    }
+                    }   
                 }
                 foreach (var error in result.Errors)
                 {
