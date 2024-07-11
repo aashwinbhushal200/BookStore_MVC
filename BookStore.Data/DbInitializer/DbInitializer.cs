@@ -59,8 +59,8 @@ namespace BookStore.DataAccess.DbInitializer
                 _userManager.CreateAsync(new ApplicationUser
                 {
                     UserName = "aashwinbhushal200@gmail.com",
-                    Email =    "admin@dotnetmastery.com",
-                    Name = "Bhrugen Patel",
+                    Email = "aashwinbhushal200@gmail.com",
+                    Name = "aashwinbhushal",
                     PhoneNumber = "1112223333",
                     StreetAddress = "test 123 Ave",
                     State = "IL",
