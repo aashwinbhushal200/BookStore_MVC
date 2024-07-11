@@ -17,7 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 /*builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();*
   Replaced by UnitOfwork--> calls categoryRepo*/
 //add razorPage support where identity was created
-
+//dbinitalizer setup
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>(); 
 builder.Services.AddScoped<IEmailSender,EmailSender>(); 
