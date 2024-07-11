@@ -58,15 +58,15 @@ namespace BookStore.DataAccess.DbInitializer
                 //if roles are not created, then we will create admin user as well
                 _userManager.CreateAsync(new ApplicationUser
                 {
-                    UserName = "admin@dotnetmastery.com",
-                    Email = "admin@dotnetmastery.com",
+                    UserName = "aashwinbhushal200@gmail.com",
+                    Email =    "admin@dotnetmastery.com",
                     Name = "Bhrugen Patel",
                     PhoneNumber = "1112223333",
                     StreetAddress = "test 123 Ave",
                     State = "IL",
                     PostalCode = "23422",
                     City = "Chicago"
-                }, "Admin123*").GetAwaiter().GetResult();
+                }, "Admin@123").GetAwaiter().GetResult();
 
 
                 ApplicationUser user = _db.ApplicationUser.FirstOrDefault(u => u.Email == "admin@dotnetmastery.com");

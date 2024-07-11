@@ -12,5 +12,6 @@
 they don't use model binding, they depend on the data passed when calling the view component. 
 */
 /*facebook login
-https://localhost:44303/signin-facebook*/
+https://localhost:44303/signin-facebook
+add azure appservice url: bookstore88848.azurewebsites.net on FB valid OAuth Redirect URL.    */
 
